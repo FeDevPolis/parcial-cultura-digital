@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Primer Parcial - Federico Poliseno</title>
+    
+    <link rel="icon" type="image/x-icon" href="favicon.png">
+
     <style>
         :root {
             --accent-color: #deff9a;
             --bg-color: #050505;
             --card-bg: #111;
-            --disabled-color: #333;
         }
 
         body {
@@ -29,6 +31,16 @@
         .info-header {
             text-align: center;
             margin-bottom: 20px;
+            width: 90%;
+            max-width: 600px; /* Alineado con el ancho del carrusel */
+        }
+
+        /* Ajuste del Logo de la Universidad */
+        .uni-logo {
+            width: 100%; /* Se ajusta al ancho del cuadro de texto */
+            height: auto;
+            margin-bottom: 15px;
+            display: block;
         }
 
         .info-header h1 { font-size: 1.8rem; margin: 0; color: #f0f0f0; }
@@ -68,7 +80,7 @@
         }
 
         .slide.active { opacity: 1; z-index: 10; }
-        img { width: 100%; height: 100%; object-fit: contain; }
+        img.slide-img { width: 100%; height: 100%; object-fit: contain; }
 
         .nav-btn {
             position: absolute;
@@ -96,12 +108,7 @@
             transform: translateY(-50%) scale(1.1);
         }
 
-        /* Estilo para cuando el botón llega al tope */
-        .nav-btn:disabled {
-            opacity: 0.2;
-            cursor: not-allowed;
-            filter: grayscale(1);
-        }
+        .nav-btn:disabled { opacity: 0.2; cursor: not-allowed; filter: grayscale(1); }
 
         .prev { left: -65px; }
         .next { right: -65px; }
@@ -127,6 +134,8 @@
 <body>
 
     <header class="info-header">
+        <img src="logo-unpilar.png" alt="Logo Universidad Nacional de Pilar" class="uni-logo">
+        
         <h1>Primer Parcial</h1>
         <p>Alumno: Federico Poliseno</p>
     </header>
@@ -135,16 +144,16 @@
         <button id="prevBtn" class="nav-btn prev" onclick="changeSlide(-1)" disabled>&#10094;</button>
         
         <div class="slides-container">
-            <div class="slide active"><img src="Instagram Carrousel 1.jpg" alt="1"></div>
-            <div class="slide"><img src="Instagram Carrousel 2.jpg" alt="2"></div>
-            <div class="slide"><img src="Instagram Carrousel 3.jpg" alt="3"></div>
-            <div class="slide"><img src="Instagram Carrousel 4.jpg" alt="4"></div>
-            <div class="slide"><img src="Instagram Carrousel 5.jpg" alt="5"></div>
-            <div class="slide"><img src="Instagram Carrousel 6.jpg" alt="6"></div>
-            <div class="slide"><img src="Instagram Carrousel 7.jpg" alt="7"></div>
-            <div class="slide"><img src="Instagram Carrousel 8.jpg" alt="8"></div>
-            <div class="slide"><img src="Instagram Carrousel 9.jpg" alt="9"></div>
-            <div class="slide"><img src="Instagram Carrousel 10.jpg" alt="10"></div>
+            <div class="slide active"><img src="Instagram Carrousel 1.jpg" alt="1" class="slide-img"></div>
+            <div class="slide"><img src="Instagram Carrousel 2.jpg" alt="2" class="slide-img"></div>
+            <div class="slide"><img src="Instagram Carrousel 3.jpg" alt="3" class="slide-img"></div>
+            <div class="slide"><img src="Instagram Carrousel 4.jpg" alt="4" class="slide-img"></div>
+            <div class="slide"><img src="Instagram Carrousel 5.jpg" alt="5" class="slide-img"></div>
+            <div class="slide"><img src="Instagram Carrousel 6.jpg" alt="6" class="slide-img"></div>
+            <div class="slide"><img src="Instagram Carrousel 7.jpg" alt="7" class="slide-img"></div>
+            <div class="slide"><img src="Instagram Carrousel 8.jpg" alt="8" class="slide-img"></div>
+            <div class="slide"><img src="Instagram Carrousel 9.jpg" alt="9" class="slide-img"></div>
+            <div class="slide"><img src="Instagram Carrousel 10.jpg" alt="10" class="slide-img"></div>
         </div>
 
         <button id="nextBtn" class="nav-btn next" onclick="changeSlide(1)">&#10095;</button>
@@ -166,8 +175,6 @@
 
         function changeSlide(direction) {
             const nextIndex = currentSlide + direction;
-
-            // Bloqueo de límites (No permitir ir antes de 0 ni después de 9)
             if (nextIndex >= 0 && nextIndex < slides.length) {
                 slides[currentSlide].classList.remove('active');
                 currentSlide = nextIndex;
@@ -177,10 +184,7 @@
         }
 
         function updateUI() {
-            // Actualizar texto del contador
             counter.innerText = `${currentSlide + 1} / ${slides.length}`;
-
-            // Deshabilitar flechas en los extremos
             prevBtn.disabled = (currentSlide === 0);
             nextBtn.disabled = (currentSlide === slides.length - 1);
         }

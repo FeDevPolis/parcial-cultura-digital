@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Primer Parcial - Federico Poliseno</title>
+    <style>
+        :root {
+            --accent-color: #deff9a;
+            --bg-color: #050505;
+            --card-bg: #111;
+            --disabled-color: #333;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            color: white;
+            overflow: hidden;
+        }
+
+        .info-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .info-header h1 { font-size: 1.8rem; margin: 0; color: #f0f0f0; }
+        .info-header p { color: #888; text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; margin-top: 5px; }
+
+        .slider-wrapper {
+            position: relative;
+            width: 90%;
+            max-width: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slides-container {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            position: relative;
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+            border: 1px solid #222;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide.active { opacity: 1; z-index: 10; }
+        img { width: 100%; height: 100%; object-fit: contain; }
+
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(17, 17, 17, 0.8);
+            color: white;
+            border: 1px solid #333;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 100;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: var(--accent-color);
+            color: black;
+            border-color: var(--accent-color);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        /* Estilo para cuando el botón llega al tope */
+        .nav-btn:disabled {
+            opacity: 0.2;
+            cursor: not-allowed;
+            filter: grayscale(1);
+        }
+
+        .prev { left: -65px; }
+        .next { right: -65px; }
+
+        .counter { margin-top: 15px; font-size: 0.8rem; color: #666; letter-spacing: 2px; }
+
+        .footer-credits {
+            margin-top: 30px;
+            text-align: center;
+            color: #444;
+            font-size: 0.75rem;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .nav-btn { width: 40px; height: 40px; }
+            .prev { left: 5px; }
+            .next { right: 5px; }
+            .slider-wrapper { width: 95%; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="info-header">
+        <h1>Primer Parcial</h1>
+        <p>Alumno: Federico Poliseno</p>
+    </header>
+
+    <div class="slider-wrapper">
+        <button id="prevBtn" class="nav-btn prev" onclick="changeSlide(-1)" disabled>&#10094;</button>
+        
+        <div class="slides-container">
+            <div class="slide active"><img src="Instagram Carrousel 1.jpg" alt="1"></div>
+            <div class="slide"><img src="Instagram Carrousel 2.jpg" alt="2"></div>
+            <div class="slide"><img src="Instagram Carrousel 3.jpg" alt="3"></div>
+            <div class="slide"><img src="Instagram Carrousel 4.jpg" alt="4"></div>
+            <div class="slide"><img src="Instagram Carrousel 5.jpg" alt="5"></div>
+            <div class="slide"><img src="Instagram Carrousel 6.jpg" alt="6"></div>
+            <div class="slide"><img src="Instagram Carrousel 7.jpg" alt="7"></div>
+            <div class="slide"><img src="Instagram Carrousel 8.jpg" alt="8"></div>
+            <div class="slide"><img src="Instagram Carrousel 9.jpg" alt="9"></div>
+            <div class="slide"><img src="Instagram Carrousel 10.jpg" alt="10"></div>
+        </div>
+
+        <button id="nextBtn" class="nav-btn next" onclick="changeSlide(1)">&#10095;</button>
+    </div>
+
+    <div class="counter" id="counter">1 / 10</div>
+
+    <footer class="footer-credits">
+        Desarrollado por Federico Poliseno <br>
+        Cátedra: Introducción a la Cultura Digital - UNPilar
+    </footer>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const counter = document.getElementById('counter');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        function changeSlide(direction) {
+            const nextIndex = currentSlide + direction;
+
+            // Bloqueo de límites (No permitir ir antes de 0 ni después de 9)
+            if (nextIndex >= 0 && nextIndex < slides.length) {
+                slides[currentSlide].classList.remove('active');
+                currentSlide = nextIndex;
+                slides[currentSlide].classList.add('active');
+                updateUI();
+            }
+        }
+
+        function updateUI() {
+            // Actualizar texto del contador
+            counter.innerText = `${currentSlide + 1} / ${slides.length}`;
+
+            // Deshabilitar flechas en los extremos
+            prevBtn.disabled = (currentSlide === 0);
+            nextBtn.disabled = (currentSlide === slides.length - 1);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "ArrowLeft") changeSlide(-1);
+            if (e.key === "ArrowRight") changeSlide(1);
+        });
+    </script>
+
+</body>
+</html>
